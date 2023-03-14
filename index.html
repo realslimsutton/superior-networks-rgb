@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RGB Gradient Creator</title>
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin="">
+        <link rel="preconnect" href="https://unpkg.com" crossorigin="">
+        <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;600;500;700&amp;display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="./style.css">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#4fc2f7">
+        <meta name="theme-color" content="#4FC2F7">
+
+    </head>
+
+    <body id="bg" class="dark" style="font-family: 'Inter', sans-serif;">
+        <div class="container" style="position: relative; z-index: 10;">
+            <div style="text-align: center;">
+                <img
+                        src="/assets/images/superior-network-logo.png"
+                        alt="Superior Network"
+                        style="width: 40%; height: auto;"
+                />
+            </div>
+
+            <div id="hexColorTemplate" style="display:none;">
+                <div class="row" style="margin-top: 5px;">
+                    <label for="color-$NUM" style="display: flex; align-items: center; justify-content: space-between;">
+                        <span>
+                            Colour #$NUM
+                        </span>
+                        <button
+                                style="background: transparent; border: none !important; outline:none !important; display: flex; align-items: center; justify-content: space-between;"
+                                onclick="randomColor($NUM)"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 20 20"
+                                 fill="currentColor"
+                                 style="height: 13px; width: 13px;"
+                            >
+                                <path fill-rule="evenodd"
+                                      d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </label>
+                    <input class="form-control col-md-1 hexColor"
+                           id="color-$NUM"
+                           style="border-radius: 10px;"
+                           value="$VAL"
+                           data-jscolor="{preset:'small dark', position:'right'}"
+                           oninput="updateOutputText(event)"
+                           onchange="updateOutputText(event);"/>
+                </div>
+            </div>
+
+            <div id="content">
+                <img src="" alt="">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2" style="padding-left: 0;">
+                            <div style="margin-top: 12px;">
+                                <button
+                                        class="btn" style="display: flex; align-items: center; justify-content: center; gap: 2px; width: 100%; margin-bottom: 15px; background-color: #37a9fa !important; color: #fff !important;"
+                                        onclick="randomColours()"
+                                >
+                                    <span style="margin-top: 3px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             viewBox="0 0 20 20"
+                                             fill="currentColor"
+                                             style="height: 14px; width: 14px;"
+                                        >
+                                            <path fill-rule="evenodd"
+                                                  d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
+                                                  clip-rule="evenodd"/>
+                                        </svg>
+                                    </span>
+
+                                    <span>
+                                        Random
+                                    </span>
+                                </button>
+                            </div>
+                            <div id="hexColors" class="container-fluid"></div>
+                        </div>
+                        <div class="col-md-10" style="padding-right: 0;">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div id="coloredNick" class="minecraft"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" style="padding-left: 0;">
+                                        <div>
+                                            <label for="nickname">Message</label>
+                                            <input class="form-control"
+                                                   id="nickname"
+                                                   type="text"
+                                                   maxlength="100"
+                                                   placeholder="Your Text"
+                                                   style="border-radius:10px;"
+                                                   value="superiornetworks.org"
+                                                   oninput="updateOutputText(event);"
+                                                   onchange="updateOutputText(event)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" class="padding-right: 0;">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="numOfColors">Number of Colours</label>
+                                                <input class="form-control"
+                                                       style="width: 75px;border-radius:10px;"
+                                                       value="2" id="numOfColors" type="number" min="2" max="5"
+                                                       onchange="updateOutputText(event); toggleColors(this.value);"
+                                                       oninput="updateOutputText(event); toggleColors(this.value);"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="dbold">
+                                                <input type="checkbox" id="bold" onclick="updateOutputText(event);"/>
+                                                <label for="bold">Bold</label>
+                                            </div>
+                                            <div id="ditalics">
+                                                <input type="checkbox" id="italics" onclick="updateOutputText(event);"/>
+                                                <label for="italics">Italic</label>
+                                            </div>
+                                            <div id="dunderline">
+                                                <input type="checkbox"
+                                                       id="underline"
+                                                       onclick="updateOutputText(event);"/>
+                                                <label for="underline">Underline</label>
+                                            </div>
+                                            <div id="dstrike">
+                                                <input type="checkbox" id="strike" onclick="updateOutputText(event);"/>
+                                                <label for="strike">Strikethrough</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="output" style="margin-top: 15px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                                            <label id="label4" for="outputText">Output</label>
+                                            <label id="graylabel2"
+                                                   class="gray"
+                                                   for="outputText"
+                                                   style="font-size: 12px; font-weight: 600; color: #eee; display: inline-block;margin-left: auto; text-right: auto;user-select:none;">Copy
+                                                &amp; paste
+                                                this for RGB text!</label>
+                                        </div>
+                                        <pre id="outputText"
+                                             style="cursor: pointer;border-radius: 10px; white-space: pre-wrap; height: 70px; font-family: MinecraftRegular; margin-bottom: 5px;"
+                                        ></pre>
+                                        <p id="error">This is more than 256 characters and may not fit in the chat
+                                            box.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="https://unpkg.com/jquery@1.9.1/jquery.min.js"></script>
+        <script type="text/javascript"
+                src="https://unpkg.com/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+        <script src="jscolor.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
