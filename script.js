@@ -1,4 +1,3 @@
-// elements for obtaining vals
 const nickName = document.getElementById('nickname');
 const coloredNick = document.getElementById('coloredNick');
 const savedColors = [getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor(), getRandomHexColor()];
@@ -62,7 +61,6 @@ const formats = {
         formatChar: null,
         maxLength: null
     },
-    // Superior Networks format
     9: {
         outputPrefix: '',
         template: '{#$1$2$3$4$5$6$f$c}',
@@ -71,66 +69,18 @@ const formats = {
     }
 };
 
-function darkMode() {
-    if (document.getElementById('darkmode').checked == true) {
-        document.body.classList.add('dark');
-        document.getElementById('numOfColors').classList.add("dark");
-        document.getElementById('graylabel1').classList.replace("gray", "darkgray");
-        document.getElementById('graylabel2').classList.replace("gray", "darkgray");
-        document.getElementById('outputText').classList.replace("gray", "darkgray");
-        document.getElementById('outputText').classList.replace("gray", "darkgray");
-        document.getElementById('error').classList.replace("errortext", "darkerrortext");
-        document.getElementById('numOfColors').classList.add("darktextboxes");
-        document.getElementById('nickname').classList.add("darktextboxes");
-        document.getElementById('outputText').classList.add("darktextboxes");
-        Array.from(document.getElementsByClassName("hexColor")).forEach(e => {
-            document.getElementById(e.id).classList.add("darktextboxes");
-        })
-    } else {
-        document.body.classList.remove('dark');
-        document.getElementById('numOfColors').classList.remove("dark");
-        document.getElementById('graylabel1').classList.replace("darkgray", "gray");
-        document.getElementById('graylabel2').classList.replace("darkgray", "gray");
-        document.getElementById('outputText').classList.replace("darkgray", "gray");
-        document.getElementById('error').classList.replace("darkerrortext", "errortext");
-        document.getElementById('numOfColors').classList.remove("darktextboxes");
-        document.getElementById('nickname').classList.remove("darktextboxes");
-        document.getElementById('outputText').classList.remove("darktextboxes");
-        Array.from(document.getElementsByClassName("hexColor")).forEach(e => {
-            document.getElementById(e.id).classList.remove("darktextboxes");
-        })
-    }
-}
+let numOfColours = 2;
 
-/* Get a random HEX color */
 function getRandomHexColor() {
     return Math.floor(Math.random() * 16777215).toString(16).toUpperCase();
 }
 
-/* 
-Copies contents to clipboard
-function copyTextToClipboard(text) {
-  let textArea = document.createElement('textarea');
-  textArea.value = text;
-
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-
-  document.execCommand('copy');
-  alert('Copied output!');
-  document.body.removeChild(textArea);
-}
-*/
-
 function showError(show) {
     if (show) {
         document.getElementById('error').style.display = 'block';
-        document.getElementById('outputText').style.height = '70px';
         document.getElementById('outputText').style.marginBottom = '5px';
     } else {
         document.getElementById('error').style.display = 'none';
-        document.getElementById('outputText').style.height = '95px';
         document.getElementById('outputText').style.marginBottom = '10px';
     }
 }
@@ -163,10 +113,6 @@ function convertToRGB(hex) {
     return color;
 }
 
-/**
- * JavaScript implementation of HexUtils Gradients from RoseGarden.
- * https://github.com/Rosewood-Development/RoseGarden/blob/master/src/main/java/dev/rosewood/rosegarden/utils/HexUtils.java#L358
- */
 class Gradient {
     constructor(colors, numSteps) {
         this.colors = colors;
@@ -179,7 +125,6 @@ class Gradient {
             this.gradients.push(new TwoStopGradient(colors[i], colors[i + 1], increment * i, increment * (i + 1)));
     }
 
-    /* Gets the next color in the gradient sequence as an array of 3 numbers: [r, g, b] */
     next() {
         if (this.steps <= 1)
             return this.colors[0];
@@ -222,20 +167,38 @@ class TwoStopGradient {
     }
 }
 
-/* Toggles the number of gradient colors between 2 and 5 based on user input */
+function addNumColours() {
+    numOfColours++;
+    if(numOfColours > 5) {
+        numOfColours = 5;
+    }
+
+    toggleColors(numOfColours);
+    updateOutputText(event);
+}
+
+function removeNumColours() {
+    numOfColours--;
+    if(numOfColours < 2) {
+        numOfColours = 2;
+    }
+
+    toggleColors(numOfColours);
+    updateOutputText(event);
+}
+
 function toggleColors(colors) {
     let clamped = Math.min(5, Math.max(2, colors));
     if (colors == 1 || colors == '') {
         colors = getColors().length;
     } else if (colors != clamped) {
-        $('#numOfColors').val(clamped);
+        numOfColours = clamped;
         colors = clamped;
     }
     const container = $('#hexColors');
     const hexColors = container.find('.hexColor');
     const number = hexColors.size();
     if (number > colors) {
-        // Need to remove some colors
         hexColors.each((index, element) => {
             if (index + 1 > colors) {
                 savedColors[index] = $(element).val();
@@ -243,17 +206,15 @@ function toggleColors(colors) {
             }
         });
     } else if (number < colors) {
-        // Need to add some colors
         let template = $('#hexColorTemplate').html();
         for (let i = number + 1; i <= colors; i++) {
             let html = template.replaceAll(/\$NUM/g, i).replaceAll(/\$VAL/g, savedColors[i - 1]);
             container.append(html);
         }
-        jscolor.install(); // Refresh all jscolor elements
+        jscolor.install();
     }
 }
 
-/* Gets all colored entered by the user */
 function getColors() {
     const hexColors = $('#hexColors').find('.hexColor');
     const colors = [];
@@ -340,12 +301,6 @@ function updateOutputText(event) {
     displayColoredName(newNick, charColors);
 }
 
-/**
- * padding function:
- * cba to roll my own, thanks Pointy!
- * ==================================
- * source: http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
- */
 function pad(n, width, z) {
     z = z || '0';
     n = n + '';
@@ -383,20 +338,19 @@ function preset(n) {
     const colors = presets[n].colors
     const container = $('#hexColors');
     container.empty();
-    // Need to add some colors
     let template = $('#hexColorTemplate').html();
     for (let i = 0 + 1; i <= colors.length; i++) {
         let html = template.replaceAll(/\$NUM/g, i).replaceAll(/\$VAL/g, colors[i - 1]);
         container.append(html);
     }
-    jscolor.install(); // Refresh all jscolor elements
+    jscolor.install();
 }
 
-toggleColors(document.getElementById('numOfColors').value);
+toggleColors(2);
 updateOutputText();
 
 function selectText(containerid) {
-    if (document.selection) { // IE
+    if (document.selection) {
         var range = document.body.createTextRange();
         range.moveToElementText(document.getElementById(containerid));
         range.select();
